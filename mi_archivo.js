@@ -1,24 +1,14 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 const path = require('path');
+const app = express();
 
-const server = http.createServer((req, res) => {
-    if (req.url === '/') {
-        fs.readFile(path.join(__dirname, 'Formulario-Ikkert', 'formulario.html'), (err, content) => {
-            if (err) throw err;
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(content);
-        });
-    } else if (req.url === '/style.css') {
-        fs.readFile(path.join(__dirname, 'Formulario-Ikkert', 'style.css'), (err, content) => {
-            if (err) throw err;
-            res.writeHead(200, { 'Content-Type': 'text/css' });
-            res.end(content);
-        });
-    }
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'formulario.html'));
 });
 
-server.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
